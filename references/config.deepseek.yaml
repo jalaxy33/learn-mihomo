@@ -1,0 +1,295 @@
+# deepseek给的配置
+
+# ==================== 基础设置 ====================
+mixed-port: 7890
+allow-lan: false
+mode: rule
+log-level: info
+ipv6: false
+external-controller: 127.0.0.1:9090
+secret: "your-secret-here"
+
+# ==================== 性能调优 ====================
+tcp-concurrent: true
+unified-delay: true
+geodata-mode: true
+geodata-loader: standard
+geo-auto-update: true
+geo-update-interval: 48
+
+# ==================== 持久化 ====================
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+# ==================== 机场订阅（多订阅源） ====================
+proxy-providers:
+  # ---------- 主力机场 A ----------
+  Airport_A:
+    type: http
+    url: "你的主力机场订阅链接"
+    interval: 3600
+    path: ./proxy_providers/airport_a.yaml
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+    override:
+      udp: true
+      udp-over-tcp: true
+      udp-over-tcp-version: 2
+      additional-prefix: "[A] "    # 节点前缀，避免与 B 机场重名
+
+  # ---------- 备用机场 B ----------
+  Airport_B:
+    type: http
+    url: "你的备用机场订阅链接"
+    interval: 3600
+    path: ./proxy_providers/airport_b.yaml
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 300
+    override:
+      udp: true
+      udp-over-tcp: true
+      udp-over-tcp-version: 2
+      additional-prefix: "[B] "    # 节点前缀，避免与 A 机场重名
+
+# ==================== DNS 配置（防泄露核心） ====================
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  ipv6: false
+  prefer-h3: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - "*.localdomain"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - "stun.*.*"
+    - "time.*.com"
+    - "time.*.gov"
+    - "pool.ntp.org"
+    - "localhost.ptlogin2.qq.com"
+    - "+.market.xiaomi.com"
+
+  default-nameserver:
+    - 1.1.1.1
+    - 8.8.8.8
+
+  proxy-server-nameserver:
+    - https://dns.google/dns-query&disable-qtype-65=true
+    - https://dns.cloudflare.com/dns-query&disable-qtype-65=true
+
+  nameserver:
+    - https://dns.google/dns-query&disable-qtype-65=true
+    - https://dns.cloudflare.com/dns-query&disable-qtype-65=true
+
+  nameserver-policy:
+    "geosite:cn,private":
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+    "geosite:geolocation-!cn":
+      - https://dns.google/dns-query&disable-qtype-65=true
+      - https://dns.cloudflare.com/dns-query&disable-qtype-65=true
+
+# ==================== TUN 配置 ====================
+tun:
+  enable: true
+  stack: mixed
+  device: mihomo0
+  auto-route: true
+  auto-detect-interface: true
+  strict-route: true
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+    - "icmp://any:53"
+  mtu: 9000
+  gso: true
+  gso-max-size: 65536
+
+# ==================== 域名嗅探 ====================
+sniffer:
+  enable: true
+  sniffing:
+    - tls
+    - http
+  force-dns-mapping: true
+  parse-pure-ip: true
+  skip-domain:
+    - "+.local"
+    - "ntp.org"
+    - "*.lan"
+
+# ==================== 代理组（多订阅编排） ====================
+proxy-groups:
+  # 全局手动切换入口
+  - name: "手动选择"
+    type: select
+    use:
+      - Airport_A
+      - Airport_B
+    proxies:
+      - 故障转移
+      - 自动选择
+      - DIRECT
+
+  # 合并两机场节点，自动测速选优
+  - name: "自动选择"
+    type: url-test
+    use:
+      - Airport_A
+      - Airport_B
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    lazy: true
+
+  # 多机场优先级故障转移：A 整体不可用时自动切 B
+  - name: "故障转移"
+    type: fallback
+    use:
+      - Airport_A   # 主力机场，优先级最高
+      - Airport_B   # 备用机场，主力不可用时自动切换
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+
+  # 按机场独立分组（便于手动排查）
+  - name: "A-选择"
+    type: select
+    use:
+      - Airport_A
+
+  - name: "B-选择"
+    type: select
+    use:
+      - Airport_B
+
+  # AI 服务专用组
+  - name: "AI"
+    type: select
+    use:
+      - Airport_A
+      - Airport_B
+    proxies:
+      - 故障转移
+      - DIRECT
+
+  # 流媒体专用组
+  - name: "流媒体"
+    type: select
+    use:
+      - Airport_A
+      - Airport_B
+    proxies:
+      - 故障转移
+
+  # 游戏平台专用组
+  - name: "游戏平台"
+    type: select
+    use:
+      - Airport_A
+      - Airport_B
+    proxies:
+      - 故障转移
+
+  # 直连组
+  - name: "直连"
+    type: select
+    proxies:
+      - DIRECT
+
+# ==================== 规则集 ====================
+rule-providers:
+  private:
+    type: http
+    behavior: classical
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"
+    path: ./ruleset/private.mrs
+    interval: 86400
+
+  adblock:
+    type: http
+    behavior: classical
+    format: mrs
+    url: "https://raw.githubusercontent.com/REIJI007/AdBlock_Rule_For_Clash/main/adblock_reject.mrs"
+    path: ./ruleset/adblock.mrs
+    interval: 120
+
+  cn-domain:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"
+    path: ./ruleset/cn-domain.mrs
+    interval: 86400
+
+  cn-ip:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
+    path: ./ruleset/cn-ip.mrs
+    interval: 86400
+
+  ai-rules:
+    type: http
+    behavior: classical
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs"
+    path: ./ruleset/ai.mrs
+    interval: 43200
+
+  streaming:
+    type: http
+    behavior: classical
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"
+    path: ./ruleset/streaming.mrs
+    interval: 43200
+
+  game:
+    type: http
+    behavior: classical
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam.mrs"
+    path: ./ruleset/game.mrs
+    interval: 43200
+
+# ==================== 分流规则 ====================
+rules:
+  # 1. 广告拦截
+  - RULE-SET,adblock,REJECT
+
+  # 2. STUN 端口拦截（防 WebRTC 泄露真实 IP）
+  - AND,((NETWORK,UDP),(DST-PORT,3478)),REJECT-DROP
+  - AND,((NETWORK,UDP),(DST-PORT,5349)),REJECT-DROP
+  - AND,((NETWORK,UDP),(DST-PORT,19302-19309)),REJECT-DROP
+
+  # 3. 本地/私有网络直连
+  - RULE-SET,private,直连,no-resolve
+
+  # 4. AI 服务
+  - RULE-SET,ai-rules,AI
+
+  # 5. 流媒体
+  - RULE-SET,streaming,流媒体
+
+  # 6. 游戏平台
+  - RULE-SET,game,游戏平台
+
+  # 7. 国内域名直连
+  - RULE-SET,cn-domain,直连
+
+  # 8. 国内 IP 直连
+  - RULE-SET,cn-ip,直连,no-resolve
+
+  # 9. 兜底：其余全部走多机场故障转移
+  - MATCH,故障转移
