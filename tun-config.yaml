@@ -8,7 +8,7 @@
 # 1. 安装 mihomo
 # 2. 将此文件放在 /etc/mihomo/config.yaml，在 `proxy_providers` 处填入订阅链接后保存
 # 3. 检查配置文件语法
-#       sudo mihomo -c -f /etc/mihomo/config.yaml
+#       sudo mihomo -t -f /etc/mihomo/config.yaml
 # 4. 创建并启动 systemd 服务
 #       如果服务不存在，参考官方文档创建配置文件：
 #           https://wiki.metacubex.one/startup/service/
