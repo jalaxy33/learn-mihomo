@@ -10,7 +10,8 @@
 # 3. 检查配置文件语法
 #       sudo mihomo -c -f /etc/mihomo/config.yaml
 # 4. 创建并启动 systemd 服务
-#       参考教程创建配置文件：https://wiki.metacubex.one/startup/service/
+#       如果服务不存在，参考官方文档创建配置文件：
+#           https://wiki.metacubex.one/startup/service/
 #       启动服务：sudo systemctl start mihomo
 #       开机自启：sudo systemctl enable --now mihomo
 # 5. 如果配置了防火墙还需要放行tun对应设备名，这里是 `mihomo`
