@@ -1,8 +1,8 @@
 # ══════════════════════════════════════════════════════════════
-# Mihomo 进阶配置模板 · 综合所有进阶特性
+# Mihomo 配置模版 - 启用TUN透明代理
 # ══════════════════════════════════════════════════════════════
 
-# 来源：https://github.com/HenryChiao/MIHOMO_YAMLS/wiki/第三阶段：进阶篇
+# 来源：https://github.com/HenryChiao/MIHOMO_YAMLS/wiki/
 #
 # 用法（Linux）：
 # 1. 安装 mihomo
@@ -14,10 +14,9 @@
 #           https://wiki.metacubex.one/startup/service/
 #       启动服务：sudo systemctl start mihomo
 #       开机自启：sudo systemctl enable --now mihomo
-# 5. 如果配置了防火墙还需要放行tun对应设备名，这里是 `mihomo`
+# 5. 如果启用了防火墙还需要放行tun对应设备名，这里是 `mihomo`
 # 6. 访问管理界面：
 #       http://localhost:9090/ui/
-#       http://127.0.0.1:9090/ui/
 
 # ── 全局 ──────────────────────────────────────────────────────
 mixed-port: 7890
