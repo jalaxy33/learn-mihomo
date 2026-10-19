@@ -414,9 +414,13 @@ rule-providers:
 # ── 路由规则 ──────────────────────────────────────────────────
 #
 # 规则优先级：优先级高的在前
-# 推荐：所有非 IP 类规则在前，IP 类规则在后。
-# 
-# 规则参数文档：https://wiki.metacubex.one/config/rules/
+# 默认规则推荐顺序：所有非 IP 类规则在前，IP 类规则在后。
+#
+# 如果要手动为域名指定代理组，为了防止被覆盖，推荐将该域名规则放在最上面。
+#
+# 参考这些文档：
+# - [官方路由规则文档](https://wiki.metacubex.one/config/rules/)
+# - [路由规则说明](https://github.com/HenryChiao/MIHOMO_YAMLS/wiki/第一阶段：小白篇#八路由规则rules)
 #
 rules:
   # 非 IP 类（不触发 DNS 解析）
