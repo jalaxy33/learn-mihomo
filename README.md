@@ -8,16 +8,10 @@
 
 ## 说明文档
 
-- [创建systemd服务](./docs/创建systemd服务.md)
-- [TUN防火墙配置](./docs/TUN防火墙配置.md)
+- [在Linux上配置mihomo服务](./docs/mihomo-on-linux.md)
+- TUN防火墙设置：[nftables](./docs/nftables-for-tun.md.md)
 
 ## 参考资料
 
-教程：
-
 - [Mihomo 配置从入门到进阶：三阶段完全教程](https://github.com/HenryChiao/MIHOMO_YAMLS/wiki)
-
-参考资料：
-
-- [虚空终端官方文档](https://wiki.metacubex.one/)
-- [官方语法手册](https://wiki.metacubex.one/handbook/syntax/)
+- [虚空终端官方文档](https://wiki.metacubex.one/) · [配置项说明](https://wiki.metacubex.one/config/)

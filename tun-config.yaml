@@ -17,6 +17,11 @@
 # 5. 如果启用了防火墙还需要放行tun对应设备名，这里是 `mihomo`
 # 6. 访问管理界面：
 #       http://localhost:9090/ui/
+#
+#     后端地址填入 http://127.0.0.1:9090
+#     密钥填入 secret 字段内容（未设置则留空）
+# 7. 每次编辑配置文件后都需要重启服务
+#       sudo systemctl restart mihomo
 
 # ── 全局 ──────────────────────────────────────────────────────
 mixed-port: 7890
@@ -188,8 +193,11 @@ proxy-providers:
     <<: *p
     #     ↓ 此处填入订阅链接
     url: "https://your-airport.com/subscribe?token=xxx"
-    #     ↓ 如果有多个订阅组，需要修改 yaml 文件名，使其保持唯一
+    #     ↓ 如果有多个订阅组，需要修改文件名，使其保持唯一
     path: ./proxy_providers/airport.yaml
+
+  # 如果有多个订阅链接，就在下方按同样的格式定义
+  # 注意修改订阅组名和 path 文件名
 
 # ── 代理组 ────────────────────────────────────────────────────
 proxy-groups:
