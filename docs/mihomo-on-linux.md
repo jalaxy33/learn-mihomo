@@ -5,7 +5,7 @@ Mihomo（原名 Clash Meta）是目前功能最完整、社区最活跃的 Clash
 本文介绍如何在 linux 上快速配置 mihomo 裸核并开启 TUN 透明代理的流程，相关原理和配置项具体含义请参考：
 
 - [Mihomo 配置从入门到进阶：三阶段完全教程](https://github.com/HenryChiao/MIHOMO_YAMLS/wiki/Home)
-- [虚空终端官方文档](https://wiki.metacubex.one/) · [配置项说明](https://wiki.metacubex.one/config/)
+- [虚空终端官方文档](https://wiki.metacubex.one/) · [配置项说明](https://wiki.metacubex.one/config/) · [路由规则](https://wiki.metacubex.one/config/rules/)
 
 ## 配置流程
 
