@@ -8,7 +8,7 @@
 
 ## 说明文档
 
-- [在Linux上配置mihomo服务](./docs/mihomo-on-linux.md)
+- [在Linux上配置mihomo代理](./docs/mihomo-on-linux.md)
 - TUN防火墙设置：[nftables](./docs/nftables-for-tun.md.md)
 
 ## 参考资料
