@@ -14,4 +14,4 @@
 ## 参考资料
 
 - [Mihomo 配置从入门到进阶：三阶段完全教程](https://github.com/HenryChiao/MIHOMO_YAMLS/wiki)
-- [虚空终端官方文档](https://wiki.metacubex.one/) · [配置项说明](https://wiki.metacubex.one/config/)
+- [虚空终端官方文档](https://wiki.metacubex.one/) · [配置项说明](https://wiki.metacubex.one/config/) · [路由规则](https://wiki.metacubex.one/config/rules/)

@@ -63,20 +63,19 @@ Mihomo（原名 Clash Meta）是目前功能最完整、社区最活跃的 Clash
      sudo systemctl enable --now mihomo
      ```
 
-5. 如果启用了防火墙（如 nftables ），还需要放行 tun 对应设备名（我的配置里是 `mihomo`）。
+5. 查看 tun 设备是否成功创建
 
-   - 查看 tun 设备是否创建
+   ```sh
+   ip -a
+   ```
 
-     ```sh
-     ip a
-     ```
+   查看是否有 mihomo 配置文件中设置的 tun 设备名（`tun` 下的 `device` 字段），我的配置里是 `mihomo`。
 
-     查看是否有 mihomo 配置文件中设置的 tun 设备名（`tun` 下的 `device` 字段）
+6. 如果启用了防火墙（如 nftables ），还需要修改防火墙配置，放行 tun 对应设备：
 
-   - 修改防火墙配置，放行 tun 设备：
-     - [nftables 防火墙配置](./nftables-for-tun.md)
+   - [nftables 防火墙配置](./nftables-for-tun.md)
 
-6. 测试代理是否生效：
+7. 测试代理是否生效：
 
    ```sh
    curl -I www.google.com

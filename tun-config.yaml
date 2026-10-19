@@ -412,6 +412,12 @@ rule-providers:
     }
 
 # ── 路由规则 ──────────────────────────────────────────────────
+#
+# 规则优先级：优先级高的在前
+# 推荐：所有非 IP 类规则在前，IP 类规则在后。
+# 
+# 规则参数文档：https://wiki.metacubex.one/config/rules/
+#
 rules:
   # 非 IP 类（不触发 DNS 解析）
   - RULE-SET,reject_non_ip,🛡️ 广告拦截
@@ -436,4 +442,5 @@ rules:
   - RULE-SET,lan_ip,DIRECT
   - RULE-SET,domestic_ip,DIRECT
   - RULE-SET,china_ip,DIRECT
+  # 兜底
   - MATCH,🐟 漏网之鱼
