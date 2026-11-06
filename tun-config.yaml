@@ -54,7 +54,7 @@ geox-url:
 # ── TUN ───────────────────────────────────────────────────────
 tun:
   enable: true
-  stack: system
+  stack: mixed
   device: mihomo
   dns-hijack: ["any:53", "tcp://any:53"]
   auto-detect-interface: true
