@@ -54,13 +54,13 @@ geox-url:
 # ── TUN ───────────────────────────────────────────────────────
 tun:
   enable: true
-  stack: mips
+  stack: system
   device: mihomo
   dns-hijack: ["any:53", "tcp://any:53"]
   auto-detect-interface: true
   auto-route: true
   strict-route: true
-  mtu: 9000
+  mtu: 1500
   route-exclude-address: ["192.168.0.0/16", "10.0.0.0/8", "172.16.0.0/12"]
 
 # ── 嗅探 ──────────────────────────────────────────────────────
@@ -79,7 +79,7 @@ dns:
   enable: true
   listen: 0.0.0.0:1053
   ipv6: false
-  prefer-h3: true
+  prefer-h3: false
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   respect-rules: true
@@ -147,7 +147,7 @@ g_urltest:
     type: url-test,
     url: "https://www.gstatic.com/generate_204",
     interval: 300,
-    lazy: true,
+    lazy: false,
     tolerance: 50,
     timeout: 2000,
     max-failed-times: 3,
@@ -191,9 +191,9 @@ proxy-providers:
 
   # 格式如下：
   #
-  # airport:                                  # <- 此处填写订阅组名，可以填中文
+  # airport:                                  # <- 此处编辑订阅组名，可以填中文
   #   <<: *p
-  #   url: "https://your-sub-url"             # <- 引号内填入订阅链接
+  #   url: "https://your_sub_url"             # <- 引号内填入订阅链接
   #   path: ./proxy_providers/airport.yaml    # <- 每个订阅组的yaml名需要是唯一的
 
   # 如果有多个订阅链接，就在下方按同样的格式定义
@@ -201,7 +201,7 @@ proxy-providers:
 
   机场订阅:
     <<: *p
-    url: ""
+    url: "https://your_sub_url"
     path: ./proxy_providers/airport.yaml
 
 
@@ -453,4 +453,5 @@ rules:
   - RULE-SET,domestic_ip,DIRECT
   - RULE-SET,china_ip,DIRECT
   # 兜底
+  - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
   - MATCH,🐟 漏网之鱼
