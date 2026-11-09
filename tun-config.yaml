@@ -452,6 +452,8 @@ rules:
   - RULE-SET,lan_ip,DIRECT
   - RULE-SET,domestic_ip,DIRECT
   - RULE-SET,china_ip,DIRECT
+  - GEOIP,CN,DIRECT
+  - SRC-GEOIP,cn,DIRECT
   # 兜底
   - AND,((NETWORK,UDP),(DST-PORT,443)),REJECT
   - MATCH,🐟 漏网之鱼
