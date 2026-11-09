@@ -429,6 +429,8 @@ rule-providers:
 # - [路由规则说明](https://github.com/HenryChiao/MIHOMO_YAMLS/wiki/第一阶段：小白篇#八路由规则rules)
 #
 rules:
+  # 自定义域名规则
+  - DOMAIN-KEYWORD,notion,🎯 节点选择
   # 非 IP 类（不触发 DNS 解析）
   - RULE-SET,reject_non_ip,🛡️ 广告拦截
   - RULE-SET,reject_domainset,🛡️ 广告拦截
